@@ -1,0 +1,80 @@
+{% csrf_token %}
+<!-- NIM Field -->
+<div class="mb-3">
+  <label for="id_nim" class="form-label">NIM</label>
+  <input
+    type="text"
+    class="form-control"
+    id="id_nim"
+    name="nim"
+    value="{{
+form.nim.value|default_if_none:'' }}"
+    required
+  />
+  <div class="invalid-feedback">{{ form.nim.errors }}</div>
+</div>
+
+<!-- Name Field -->
+<div class="mb-3">
+  <label for="id_name" class="form-label">Nama</label>
+  <input
+    type="text"
+    class="form-control"
+    id="id_name"
+    name="name"
+    value="{{
+form.name.value|default_if_none:'' }}"
+    required
+  />
+  <div class="invalid-feedback">{{ form.name.errors }}</div>
+</div>
+
+<!-- Email Field -->
+<div class="mb-3">
+  <label for="id_email" class="form-label">Email</label>
+  <input
+    type="email"
+    class="form-control"
+    id="id_email"
+    name="email"
+    value="{{
+form.email.value|default_if_none:'' }}"
+    required
+  />
+  <div class="invalid-feedback">{{ form.email.errors }}</div>
+</div>
+
+<!-- Phone Number Field -->
+<div class="mb-3">
+  <label for="id_phone_number" class="form-label">No HP</label>
+  <input
+    type="text"
+    class="form-control"
+    id="id_phone_number"
+    name="phone_number"
+    value="{{ form.phone_number.value|default_if_none:'' }}"
+    required
+  />
+  <div class="invalid-feedback">{{ form.phone_number.errors }}</div>
+</div>
+
+<!-- Year Field -->
+<div class="mb-3">
+  <label for="id_year" class="form-label">Tahun Angkatan</label>
+  <input type="number" class="form-control" id="id_year" name="year" value="{{form.year.value|default_if_none:'' }}" required>
+  <div class="invalid-feedback">{{ form.year.errors }}</div>
+</div>
+
+<!-- Teacher Field -->
+<div class="mb-3">
+  <label for="id_teacher" class="form-label">Dosen Pembimbing</label>
+  <select class="form-select" id="id_teacher" name="teacher" required>
+    {% for teacher in form.teacher.field.queryset %}
+    <option value="{{ teacher.id }}" {% if teacher.id == form.teacher.value %}selected{% endif %}>
+    {{ teacher.name }} - {{ teacher.nip }}
+    </option>
+    {% endfor %}
+  </select>
+  <div class="invalid-feedback">{{ form.teacher.errors }}</div>
+</div>
+<button type="submit" class="btn btn-primary">Simpan</button>

@@ -1,0 +1,12 @@
+{% extends 'homepage/layout.html' %} {% block title %} Tambah Mahasiswa
+{%endblock %} {% block content %}
+<div class="container">
+  <div class="d-flex align-items-center justify-content-between">
+    <h1>Tambah Mahasiswa</h1>
+    <a href="{% url 'student_index' %}" class="btn btn-secondary">Kembali</a>
+  </div>
+  <form class="needs-validation" method="POST">
+    {% include 'student/form.html' %}
+  </form>
+</div>
+{% endblock %}

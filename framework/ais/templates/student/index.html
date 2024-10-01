@@ -1,0 +1,35 @@
+{% extends 'homepage/layout.html' %} {% block title %} Daftar Mahasiswa {%endblock %} 
+{% block content %}
+<div class="container">
+  <h1>Daftar Mahasiswa</h1>
+  <a href="{% url 'student_create' %}" class="btn btn-primary mb-3">Tambah
+  <table class="table">
+    <thead>
+      <tr>
+        <th>NIM</th>
+        <th>Nama</th>
+        <th>Email</th>
+        <th>No. HP</th>
+        <th>Tahun Angkatan</th>
+        <th>Dosen Pembimbing</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+      <tr>
+        <td>{{ student.nim }}</td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.email }}</td>
+        <td>{{ student.phone_number }}</td>
+        <td>{{ student.year }}</td>
+        <td>{{ student.teacher.name }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="text-center">Tidak ada data mahasiswa</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
