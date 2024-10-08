@@ -1,35 +1,93 @@
-{% extends 'homepage/layout.html' %} {% block title %} Daftar Mahasiswa {%endblock %} 
+{% extends 'homepage/layout.html' %}
+{% block title %} Daftar Mahasiswa {% endblock %}
+
 {% block content %}
 <div class="container">
-  <h1>Daftar Mahasiswa</h1>
-  <a href="{% url 'student_create' %}" class="btn btn-primary mb-3">Tambah
-  <table class="table">
-    <thead>
-      <tr>
-        <th>NIM</th>
-        <th>Nama</th>
-        <th>Email</th>
-        <th>No. HP</th>
-        <th>Tahun Angkatan</th>
-        <th>Dosen Pembimbing</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for student in students %}
-      <tr>
-        <td>{{ student.nim }}</td>
-        <td>{{ student.name }}</td>
-        <td>{{ student.email }}</td>
-        <td>{{ student.phone_number }}</td>
-        <td>{{ student.year }}</td>
-        <td>{{ student.teacher.name }}</td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="6" class="text-center">Tidak ada data mahasiswa</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <h1>Daftar Mahasiswa</h1>
+    <a href="{% url 'student_create' %}" class="btn btn-primary mb-3">Tambah Mahasiswa</a>
+
+    <form method="GET" action="{% url 'student_index' %}" class="d-flex mb-3">
+        <input class="form-control me-2" type="search" name="q" placeholder="Cari mahasiswa..." 
+               value="{{ query|default:'' }}" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Cari</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>NIM</th>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>No. HP</th>
+                <th>Tahun Angkatan</th>
+                <th>Dosen Pembimbing</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.nim }}</td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.phone_number }}</td>
+                <td>{{ student.year }}</td>
+                <td>{{ student.teacher.name }}</td>
+                <td>
+                    <a href="{% url 'student_update' student.id %}" class="btn btn-sm btn-warning">Ubah</a>
+                    <!-- <button class="btn btn-sm btn-danger" onclick="confirmDelete({{ student.id }})">Hapus</button> -->
+                    <button class="btn btn-sm btn-danger" onclick="confirmDelete('{{ student.id }}')">Hapus</button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Tidak ada data mahasiswa</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function confirmDelete(studentId) {
+    Swal.fire({
+        title: 'Data mahasiswa akan dihapus',
+        text: 'Data tidak akan bisa dikembalikan!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Hapus!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // AJAX request untuk menghapus mahasiswa
+            fetch(`/student/delete/${studentId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    Swal.fire(
+                        'Deleted!',
+                        'Data mahasiswa berhasil dihapus.',
+                        'success'
+                    ).then(() => {
+                        // Reload halaman setelah berhasil
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire(
+                        'Error!',
+                        'Terjadi masalah saat menghapus data mahasiswa.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+</script>
+
 {% endblock %}
