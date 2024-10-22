@@ -9,6 +9,8 @@ django-bootstrap5 = "*"
 mysqlclient = "*"
 django-seed = "*"
 psycopg2 = "*"
+djangorestframework = "*"
+requests = "*"
 
 [dev-packages]
 
